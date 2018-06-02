@@ -3,6 +3,7 @@ var Gpio = require('pigpio').Gpio,
   count = 0,
   trigger = new Gpio(23, {mode: Gpio.OUTPUT}),
   echo = new Gpio(24, {mode: Gpio.INPUT, alert: true});
+var say = require('say');
  
  var distancia = 0;
 // Level must be stable for 50 ms before an alert event is emitted.
@@ -12,11 +13,13 @@ button.on('alert', (level, tick) => {
   if (level === 0) {
     if(count==0){
       count++;
-      console.log(count);
+      console.log('Modo Preventivo :: '+count);
+      say.speak('Modo proventivo Iniciado');
+      sensar();
     }else{
       count--;
-      console.log('Modo preventivo :: '+count);
-      sensar();
+      say.speak('Modo Reconocimiento Iniciado');
+      console.log('Modo Reconocimiento :: '+count);
     }
   }
 });
@@ -42,12 +45,13 @@ function sensar(){
         diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
         distancia = diff / 2 / MICROSECDONDS_PER_CM;
         if(distancia>20 && distancia<30){
+          say.speak('Cuidado, Objecto detectado');
           console.log('Objeto detectado :: '+distancia);
         }
       }
     });
   }());
-  // Trigger a distance measurement once per second
+  // Trigger a distance measurement once per two second
   setInterval(function () {
     trigger.trigger(20, 1); // Set trigger high for 10 microseconds
   }, 2000);
