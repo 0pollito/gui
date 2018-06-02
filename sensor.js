@@ -27,6 +27,6 @@ trigger.digitalWrite(0); // Make sure trigger is low
  
 // Trigger a distance measurement once per second
 setInterval(function () {
-  consoel.log("sensando");
+  console.log("sensando");
   trigger.trigger(10, 1); // Set trigger high for 10 microseconds
 }, 1000);
