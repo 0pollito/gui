@@ -1,0 +1,19 @@
+{
+  "name": "gui",
+  "version": "1.0.0",
+  "description": "\"tool for people --\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0pollito/gui.git"
+  },
+  "author": "Espinoza Isna",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/0pollito/gui/issues"
+  },
+  "homepage": "https://github.com/0pollito/gui#readme"
+}
