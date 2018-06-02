@@ -4,6 +4,7 @@ var Gpio = require('pigpio').Gpio,
   trigger = new Gpio(23, {mode: Gpio.OUTPUT}),
   echo = new Gpio(24, {mode: Gpio.INPUT, alert: true});
  
+ var distancia = 0;
 // Level must be stable for 50 ms before an alert event is emitted.
 button.glitchFilter(50000);
  
@@ -39,12 +40,15 @@ function sensar(){
       } else {
         endTick = tick;
         diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
-        console.log(diff / 2 / MICROSECDONDS_PER_CM);
+        distancia = diff / 2 / MICROSECDONDS_PER_CM;
+        if(distancia>20 && distancia<30){
+          console.log('Objeto detectado :: '+distancia);
+        }
       }
     });
   }());
   // Trigger a distance measurement once per second
   setInterval(function () {
-    trigger.trigger(10, 1); // Set trigger high for 10 microseconds
-  }, 1000);
+    trigger.trigger(20, 1); // Set trigger high for 10 microseconds
+  }, 2000);
 }
