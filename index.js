@@ -6,7 +6,7 @@ var Gpio = require('pigpio').Gpio,
 var say = require('say');
  
  var distancia = 0;
-
+ var objectDetected = 0;
 // Level must be stable for 50 ms before an alert event is emitted.
 button.glitchFilter(50000);
 
@@ -53,8 +53,12 @@ function sensar(){
         diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
         distancia = diff / 2 / MICROSECDONDS_PER_CM;
         if(distancia < 20){
-          say.speak('Cuidado, obstaculo detectado');
+          objectDetected++;
+          if(objectDetected == 1)
+            say.speak('Cuidado, obstaculo detectado');
           console.log('Objeto detectado :: '+distancia);
+        }else{
+          objectDetected = 0;
         }
       }
     });
