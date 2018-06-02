@@ -11,6 +11,13 @@ button.glitchFilter(50000);
  
 button.on('alert', (level, tick) => {
   if (level === 0) {
-    console.log(++count);
+    if(count==0){
+      count++;
+      console.log(count);
+    }else{
+      count--;
+      console.log(count);
+    }
   }
+
 });
