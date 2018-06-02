@@ -9,13 +9,14 @@ trigger.digitalWrite(0); // Make sure trigger is low
  
 (function () {
   var startTick;
- 
+  console.log(startTick);
   echo.on('alert', function (level, tick) {
     var endTick,
       diff;
  
     if (level == 1) {
       startTick = tick;
+      console.log(startTick);
     } else {
       endTick = tick;
       diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
@@ -26,5 +27,6 @@ trigger.digitalWrite(0); // Make sure trigger is low
  
 // Trigger a distance measurement once per second
 setInterval(function () {
+  consoel.log("sensando");
   trigger.trigger(10, 1); // Set trigger high for 10 microseconds
 }, 1000);
