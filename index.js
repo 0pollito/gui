@@ -14,7 +14,7 @@ button.on('alert', (level, tick) => {
       console.log(count);
     }else{
       count--;
-      console.log('Modo preventivo :: 'count);
+      console.log('Modo preventivo :: '+count);
       sensar();
     }
   }
