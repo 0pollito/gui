@@ -13,7 +13,8 @@ trigger.digitalWrite(0); // Make sure trigger is low
   echo.on('alert', function (level, tick) {
     var endTick,
       diff;
- 
+    console.log('Level :: '+level);
+    console.log('Tick :: '+tick)
     if (level == 1) {
       startTick = tick;
       console.log(startTick);
