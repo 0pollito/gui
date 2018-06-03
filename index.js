@@ -3,7 +3,7 @@ var Gpio = require('pigpio').Gpio,
   count = 0,
   trigger = new Gpio(23, {mode: Gpio.OUTPUT}),
   echo = new Gpio(24, {mode: Gpio.INPUT, alert: true});
-  
+
 var say = require('say');
  
  var distancia = 0; //distancia del objeto detectado
@@ -18,12 +18,19 @@ var say = require('say');
 // Level must be stable for 50 ms before an alert event is emitted.
 button.glitchFilter(50000);
 
-let inicio = new Promise((resolve, reject) => {
-  say.speak('Iniciando Asistente Guíame');
-  resolve("¡Guíame Iniciada!");
-}).then( (successMessage)=> {
-  //Init button listener
-  button.on('alert', (level, tick) => {
+function play(text){
+  return new Promise(function (fulfill, reject){
+    console.log('reproduciendo =', text);
+    setTimeout(function() {
+        say.speak(text);
+        fulfill({ value: text});
+    }, 100);
+  });
+}
+
+play('Iniciando Asistente Guiame').then(function(obj) {
+    console.log('terminado de reproducir =', obj.value);
+    button.on('alert', (level, tick) => {
     if (level === 0) {
       if(count==0){
         count++;
@@ -34,24 +41,27 @@ let inicio = new Promise((resolve, reject) => {
         count--;
         console.log('Modo Reconocimiento :: '+count);
         activado = 0;
-        let reconocimiento = new Promise((resolve,reject)=>{
-          say.speak('Modo Reconocimiento iniciado');
-          resolve(sig);
-        }).then(sig => internet());
-          say.speak('Modo Reconocimiento iniciado');
+        play('Modo Reconocimiento iniciado').then(function(obj) {
+          console.log('END execution with value =', obj.value);
+          return play(internet());
+        }).catch(function(err) {
+            console.error(err);
+        }); 
       }
     }
   });
-});
+}).catch(function(err) {
+    console.error(err);
+}); 
 
 function internet(){
+  var notify = 'Con internet';
  require('dns').resolve('www.google.com',function(err){
   if(err){
-   say.speak('sin conexion a internet');
-  }else{
-   say.speak('Con internet');
+   notify = 'sin conexion a internet';
   }
  });
+ return notify;
 }
 
 //function to detect obstacles
