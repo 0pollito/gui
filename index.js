@@ -18,17 +18,17 @@ var say = require('say');
 // Level must be stable for 50 ms before an alert event is emitted.
 button.glitchFilter(50000);
 
-function play(text){
+function play(text,time){
   return new Promise(function (fulfill, reject){
     console.log('reproduciendo =', text);
     setTimeout(function() {
         say.speak(text);
         fulfill({ value: text});
-    }, 100);
+    },time);
   });
 }
 
-play('Iniciando Asistente Guiame').then(function(obj) {
+play('Iniciando Asistente Guiame',2000).then(function(obj) {
     console.log('terminado de reproducir =', obj.value);
     button.on('alert', (level, tick) => {
     if (level === 0) {
@@ -39,11 +39,10 @@ play('Iniciando Asistente Guiame').then(function(obj) {
         sensar();
       }else{
         count--;
-        console.log('Modo Reconocimiento :: '+count);
         activado = 0;
-        play('Modo Reconocimiento iniciado').then(function(obj) {
+        play('Modo Reconocimiento iniciado',2000).then(function(obj) {
           console.log('END execution with value =', obj.value);
-          return play(internet());
+          return play(internet(),4000);
         }).catch(function(err) {
             console.error(err);
         }); 
