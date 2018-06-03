@@ -53,7 +53,7 @@ play('Iniciando Asistente Guiame',2000).then(function(obj) {
               console.log('abriendo camera');
               camera.photo();
               console.log('foto tomada');
-              console.log(image.sendImage();)
+              console.log(image.sendImage());
             }
         }).catch(function(err) {
             console.error(err);
