@@ -29,10 +29,11 @@ let inicio = new Promise((resolve, reject) => {
         count--;
         console.log('Modo Reconocimiento :: '+count);
         activado = 0;
-	let reconocimiento = new Promise((resolve,reject)=>{
-         say.speak('Modo Reconocimiento iniciado');
-	 resolve(sig);
-	}).then(sig => internet());
+	let reconocimiento = new Promise((resolve,reject)=>{         say.speak('Modo Reconocimiento iniciado');
+	 resolve('Iniciado');
+	}).then((successMessage)=>{
+	  internet();
+	});
       }
     }
   });
