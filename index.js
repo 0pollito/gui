@@ -5,13 +5,16 @@ var Gpio = require('pigpio').Gpio,
   echo = new Gpio(24, {mode: Gpio.INPUT, alert: true});
 
 var say = require('say');
+var request = require('request');
+var camera = require('./lib/camera');
+var immage = require('./lib/image');
  
  var distancia = 0; //distancia del objeto detectado
  var cont = 0; //contador de objetos detectados
  var activado = 0; //activacion de sensor
 // var objectDetected = 0;
 
- var distancia = 0;
+ var distancia = 50;
  var contObject = 0;
  var activado = 0;
 
@@ -43,6 +46,21 @@ play('Iniciando Asistente Guiame',2000).then(function(obj) {
         play('Modo Reconocimiento iniciado',2000).then(function(obj) {
           console.log('END execution with value =', obj.value);
           return play(internet(),4000);
+        }).then(function(obj) {
+            console.log('termino de reproducir =', obj.value);
+            console.log('tomando foto');
+            if(obj.value == 'Con internet'){
+              console.log('abriendo camera');
+              camera.photo();
+              console.log('foto tomada');
+              var formData = { photography: fs.createReadStream('vista.jpg')};
+              request.post({url:'https://guiame.duckdns.org/api/v1/descriptivo/', formData: formData}, function optionalCallback(err, httpResponse, body) {
+                if (err) {
+                  console.log('upload failed:');
+                }
+                console.log('Upload successful!  Server responded with:', body);
+              });
+            }
         }).catch(function(err) {
             console.error(err);
         }); 
