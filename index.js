@@ -45,13 +45,6 @@ play('Iniciando Asistente Guiame').then(function(obj) {
           console.log('END execution with value =', obj.value);
           return internet().then(function(notify){
               play(notify);
-            }).catch(function(notify){
-              play(notify);
-            });
-        }).then(function(obj) {
-            console.log('termino de reproducir =', obj.value);
-            console.log('tomando foto');
-            if(obj.value != 'sin conexion a internet'){
               console.log('abriendo camera');
               camera.photo().then(function(foto){
                 console.log(foto);
@@ -60,7 +53,9 @@ play('Iniciando Asistente Guiame').then(function(obj) {
                   say.speak(respuesta);
                 });
               });
-            }
+            }).catch(function(notify){
+              play(notify);
+            });
         }).catch(function(err) {
             console.error(err);
         }); 
@@ -73,11 +68,11 @@ play('Iniciando Asistente Guiame').then(function(obj) {
 
 function internet(){
   return new Promise(function(fulfill,reject){
-    var notify = '';
+    var notify = 'Conectado';
      require('dns').resolve('www.google.com',function(err){
       if(err){
-      notify = 'sin conexion a internet';
-       reject(notify);
+        notify = 'sin conexion a internet';
+        reject(notify);
       }
       fulfill(notify);
      });
