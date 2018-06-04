@@ -21,17 +21,15 @@ var image = require('./lib/image');
 // Level must be stable for 50 ms before an alert event is emitted.
 button.glitchFilter(50000);
 
-function play(text,time){
+function play(text){
   return new Promise(function (fulfill, reject){
     console.log('reproduciendo =', text);
-    setTimeout(function() {
-        say.speak(text);
-        fulfill({ value: text});
-    },time);
+    say.speak(text);
+    fulfill({ value: text});
   });
 }
 
-play('Iniciando Asistente Guiame',2000).then(function(obj) {
+play('Iniciando Asistente Guiame').then(function(obj) {
     console.log('terminado de reproducir =', obj.value);
     button.on('alert', (level, tick) => {
     if (level === 0) {
@@ -43,13 +41,17 @@ play('Iniciando Asistente Guiame',2000).then(function(obj) {
       }else{
         count--;
         activado = 0;
-        play('Modo Reconocimiento iniciado',2000).then(function(obj) {
+        play('Modo Reconocimiento iniciado').then(function(obj) {
           console.log('END execution with value =', obj.value);
-          return play(internet(),4000);
+          return internet().then(function(notify){
+              play(notify);
+            }).catch(function(notify){
+              play(notify);
+            });
         }).then(function(obj) {
             console.log('termino de reproducir =', obj.value);
             console.log('tomando foto');
-            if(obj.value == 'Con internet'){
+            if(obj.value != 'sin conexion a internet'){
               console.log('abriendo camera');
               camera.photo().then(function(foto){
                 console.log(foto);
@@ -70,13 +72,16 @@ play('Iniciando Asistente Guiame',2000).then(function(obj) {
 }); 
 
 function internet(){
-  var notify = 'Con internet';
- require('dns').resolve('www.google.com',function(err){
-  if(err){
-   notify = 'sin conexion a internet';
-  }
- });
- return notify;
+  return new Promise(function(fulfill,reject){
+    var notify = '';
+     require('dns').resolve('www.google.com',function(err){
+      if(err){
+      notify = 'sin conexion a internet';
+       reject(notify);
+      }
+      fulfill(notify);
+     });
+  });
 }
 
 //function to detect obstacles
