@@ -55,6 +55,7 @@ play('Iniciando Asistente Guiame',2000).then(function(obj) {
                 console.log(foto);
                 return image.sendImage().then(function(respuesta){
                   console.log(respuesta);
+                  say.speak(respuesta);
                 });
               });
             }
