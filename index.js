@@ -51,9 +51,12 @@ play('Iniciando Asistente Guiame',2000).then(function(obj) {
             console.log('tomando foto');
             if(obj.value == 'Con internet'){
               console.log('abriendo camera');
-              camera.photo();
-              console.log('foto tomada');
-              console.log(image.sendImage());
+              camera.photo().then(function(foto){
+                console.log(foto);
+                return image.sendImage().then(function(respuesta){
+                  console.log(respuesta);
+                });
+              });
             }
         }).catch(function(err) {
             console.error(err);
