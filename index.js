@@ -4,8 +4,6 @@ var Gpio = require('pigpio').Gpio,
   trigger = new Gpio(23, {mode: Gpio.OUTPUT}),
   echo = new Gpio(24, {mode: Gpio.INPUT, alert: true});
 
-//var say = require('say');
-
 var request = require('request');
 var player = require('./lib/audio');
 var camera = require('./lib/camera');
@@ -52,8 +50,6 @@ player.play("Iniciando Asistente Guíame")
       }
     }
   });
-}).catch(function(err) {
-    console.error(err);
 }); 
 
 function internet(){
@@ -106,7 +102,7 @@ function sensar(){
       }
     console.log(distancia+' '+cont);
    }
-  }, 2000);
+  }, 1000);
 }
 
 
