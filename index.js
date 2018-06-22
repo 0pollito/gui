@@ -4,61 +4,51 @@ var Gpio = require('pigpio').Gpio,
   trigger = new Gpio(23, {mode: Gpio.OUTPUT}),
   echo = new Gpio(24, {mode: Gpio.INPUT, alert: true});
 
-var say = require('say');
+//var say = require('say');
 
 var request = require('request');
+var player = require('./lib/audio');
 var camera = require('./lib/camera');
 var image = require('./lib/image');
  
- var distancia = 0; //distance detected object
+ var distancia = 50; //distance detected object
  var cont = 0; //count of detected objects
  var activado = 0; //sensor activation
-
- var distancia = 50;
- var contObject = 0;
- var activado = 0;
 
 // Level must be stable for 50 ms before an alert event is emitted.
 button.glitchFilter(50000);
 
-function play(text){
-  return new Promise(function (fulfill, reject){
-    console.log('reproduciendo =', text);
-    say.speak(text);
-    fulfill({ value: text});
-  });
-}
-
-play('Iniciando Asistente Guiame').then(function(obj) {
-    console.log('terminado de reproducir =', obj.value);
+player.play("Iniciando Asistente Guíame")
+  .then(function() {
     button.on('alert', (level, tick) => {
     if (level === 0) {
       if(count==0){
         count++;
-        say.speak('Modo Preventivo Iniciado');
         activado = 10;
-        sensar();
+        player.play("Modo Preventivo")
+          .then(function(){
+            sensar();
+          });
       }else{
         count--;
         activado = 0;
-        play('Modo Reconocimiento iniciado').then(function(obj) {
-          console.log('END execution with value =', obj.value);
-          return internet().then(function(notify){
-              play(notify);
-              console.log('abriendo camera');
-              camera.photo().then(function(foto){
-                console.log(foto);
-                return image.sendImage().then(function(respuesta){
-                  console.log(respuesta);
-                  say.speak(respuesta);
-                });
-              });
-            }).catch(function(notify){
-              play(notify);
-            });
-        }).catch(function(err) {
+        player.play('Modo Reconocimiento')
+          .then(function() {
+            return internet()
+          })
+          .then(function(){
+            return camera.photo()
+          })
+          .then(function() {
+            return image.sendImage()
+              .then(function(respuesta){
+                console.log(respuesta);
+                return player.play(respuesta);
+              })
+          })
+          .catch(function(err) {
             console.error(err);
-        }); 
+          }); 
       }
     }
   });
@@ -67,14 +57,15 @@ play('Iniciando Asistente Guiame').then(function(obj) {
 }); 
 
 function internet(){
-  return new Promise(function(fulfill,reject){
-    var notify = 'Conectado';
+  return new Promise(function(resolve,reject){
      require('dns').resolve('www.google.com',function(err){
       if(err){
-        notify = 'sin conexion a internet';
-        reject(notify);
+        player.play('sin conexión a internet')
+          .then(function(){
+            reject();
+          });
       }
-      fulfill(notify);
+      resolve();
      });
   });
 }
