@@ -5,14 +5,14 @@ var Gpio = require('pigpio').Gpio,
   echo = new Gpio(24, {mode: Gpio.INPUT, alert: true});
 
 var say = require('say');
+
 var request = require('request');
 var camera = require('./lib/camera');
 var image = require('./lib/image');
  
- var distancia = 0; //distancia del objeto detectado
- var cont = 0; //contador de objetos detectados
- var activado = 0; //activacion de sensor
-// var objectDetected = 0;
+ var distancia = 0; //distance detected object
+ var cont = 0; //count of detected objects
+ var activado = 0; //sensor activation
 
  var distancia = 50;
  var contObject = 0;
