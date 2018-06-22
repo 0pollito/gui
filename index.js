@@ -16,7 +16,7 @@ var image = require('./lib/image');
 // Level must be stable for 50 ms before an alert event is emitted.
 button.glitchFilter(50000);
 
-player.play("Iniciando Asistente Guíame")
+player.play("Iniciando Asistente Guiame")
   .then(function() {
     button.on('alert', (level, tick) => {
     if (level === 0) {
