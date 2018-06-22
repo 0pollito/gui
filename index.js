@@ -100,7 +100,7 @@ function sensar(){
      if(distancia < 20){
        cont++;
        if(cont == 1)
-         say.speak('Cuidado obstaculo detectado');
+         player.play('Obstaculo detectado');
       }else{
        cont = 0;
       }
