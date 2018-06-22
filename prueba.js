@@ -1,4 +1,9 @@
 var player = require('./lib/audio');
 
-player.play("tecnología, mucha tecnología")
-  .then(player.play("otra línea de texto"));
+player.play("primera línea")
+  .then(function (){
+    return player.play("segunda línea de texto")
+  })
+  .then(function () {
+    return player.play("ultima línea reproduciendo")
+  });
